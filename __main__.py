@@ -1,7 +1,11 @@
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 import logging
 
-from config import TOKEN
+try:
+    from config import TOKEN
+except:
+    import os
+    TOKEN = os.environ.get('TOKEN')
 
 
 logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s', level=logging.INFO)
@@ -17,16 +21,9 @@ def error(bot, update, error):
 
 
 def echo(bot, update):
-    text = update.message.text
-    new_text = text \
-        .replace('a', 'i') \
-        .replace('e', 'i') \
-        .replace('o', 'i') \
-        .replace('u', 'i') \
-        .replace('á', 'i') \
-        .replace('é', 'i') \
-        .replace('ó', 'i') \
-        .replace('ú', 'i')
+    new_text = update.message.text
+    for letter in 'aáAeéEoóOuúU':
+        new_text = new_text.replace(letter, 'i')
     bot.send_message(chat_id=update.message.chat_id, text=new_text)
 
 
